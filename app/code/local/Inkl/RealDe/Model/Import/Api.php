@@ -27,7 +27,7 @@ class Inkl_RealDe_Model_Import_Api
 			{
 				Mage::getModel('inkl_realde/entity_order')
 					->setStoreId($store->getId())
-					->setContent($order)
+					->setContent(json_encode($order))
 					->save();
 			}
 		}
@@ -37,12 +37,16 @@ class Inkl_RealDe_Model_Import_Api
 	{
 		try
 		{
+			/*
 			$client = ClientBuilder::create()
 				->setClientKey($this->apiConfigHelper->getClientKey($store->getId()))
 				->setClientSecret($this->apiConfigHelper->getClientSecret($store->getId()))
 				->build();
+*/
 
+			$orders = json_decode(file_get_contents(__DIR__ . '/../../data/orders.json'), true);
 
+			return $orders;
 
 		} catch (Exception $e)
 		{
