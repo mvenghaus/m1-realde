@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Inkl_RealDe>
+			<version>0.1.0</version>
+		</Inkl_RealDe>
+	</modules>
+
+	<global>
+		<blocks>
+			<inkl_realde>
+				<class>Inkl_RealDe_Block</class>
+			</inkl_realde>
+		</blocks>
+
+		<helpers>
+			<inkl_realde>
+				<class>Inkl_RealDe_Helper</class>
+			</inkl_realde>
+		</helpers>
+
+		<models>
+			<inkl_realde>
+				<class>Inkl_RealDe_Model</class>
+				<resourceModel>inkl_realde_resource</resourceModel>
+			</inkl_realde>
+			<inkl_realde_resource>
+				<class>Inkl_RealDe_Model_Resource</class>
+				<entities>
+					<orders>
+						<table>realde_orders</table>
+					</orders>
+				</entities>
+			</inkl_realde_resource>
+		</models>
+
+		<resources>
+			<inkl_realde_setup>
+				<setup>
+					<module>Inkl_RealDe</module>
+				</setup>
+			</inkl_realde_setup>
+		</resources>
+	</global>
+
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<inkl_realde after="Mage_Adminhtml">Inkl_RealDe_Adminhtml</inkl_realde>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
+
+	<adminhtml>
+		<menu>
+			<sales>
+				<children>
+					<inkl_realde translate="title">
+						<title>Real.de Orders</title>
+						<action>adminhtml/realDeOrder</action>
+						<sort_order>11</sort_order>
+					</inkl_realde>
+				</children>
+			</sales>
+		</menu>
+
+		<acl>
+			<resources>
+				<admin>
+					<children>
+						<sales>
+							<children>
+								<inkl_realde>
+									<title>Real.de</title>
+								</inkl_realde>
+							</children>
+						</sales>
+						<system>
+							<children>
+								<config>
+									<children>
+										<inkl_realde>
+											<title>Real.de</title>
+										</inkl_realde>
+									</children>
+								</config>
+							</children>
+						</system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+
+		<translate>
+			<modules>
+				<Inkl_RealDe>
+					<files>
+						<default>Inkl_RealDe.csv</default>
+					</files>
+				</Inkl_RealDe>
+			</modules>
+		</translate>
+	</adminhtml>
+
+	<default>
+		<payment>
+			<realde>
+				<active>1</active>
+				<model>inkl_realde/payment_realDe</model>
+				<order_status>processing</order_status>
+				<title>Real.de</title>
+				<payment_action>sale</payment_action>
+			</realde>
+		</payment>
+	</default>
+
+	<crontab>
+		<jobs>
+			<inkl_realde_order>
+				<schedule>
+					<cron_expr>*/10 * * * *</cron_expr>
+				</schedule>
+				<run>
+					<model>inkl_realde/cron_order::run</model>
+				</run>
+			</inkl_realde_order>
+		</jobs>
+	</crontab>
+
+</config>

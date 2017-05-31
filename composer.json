@@ -1,0 +1,32 @@
+{
+	"name": "inkl/m1-realde",
+	"type": "magento-module",
+	"homepage": "-",
+	"description": "-",
+	"authors": [
+		{
+			"name": "Marcus Venghaus",
+			"email": "info@inklammern.de"
+		}
+	],
+	"require": {
+		"magento-hackathon/magento-composer-installer": "*",
+		"inkl/address-utils": "*"
+	},
+	"extra": {
+		"map": [
+			[
+				"app/code/local/Inkl/RealDe",
+				"app/code/local/Inkl/RealDe"
+			],
+			[
+				"app/etc/modules/Inkl_RealDe.xml",
+				"app/etc/modules/Inkl_RealDe.xml"
+			],
+			[
+				"app/locale/de_DE/Inkl_RealDe.csv",
+				"app/locale/de_DE/Inkl_RealDe.csv"
+			]
+		]
+	}
+}
