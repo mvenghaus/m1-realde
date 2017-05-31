@@ -1,8 +1,6 @@
 {
 	"name": "inkl/m1-realde",
 	"type": "magento-module",
-	"homepage": "-",
-	"description": "-",
 	"authors": [
 		{
 			"name": "Marcus Venghaus",
@@ -11,7 +9,8 @@
 	],
 	"require": {
 		"magento-hackathon/magento-composer-installer": "*",
-		"inkl/address-utils": "*"
+		"inkl/address-utils": "*",
+		"hitmeister/api-sdk": "^1.13"
 	},
 	"extra": {
 		"map": [
