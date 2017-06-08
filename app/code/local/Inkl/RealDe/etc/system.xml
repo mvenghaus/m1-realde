@@ -116,6 +116,15 @@
 							<show_in_store>1</show_in_store>
 							<comment>Combine street and house number in one line</comment>
 						</one_line_street>
+						<carrier_code_mappings>
+							<label>Carrier Code Mapping</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Example: YOUR_CODE|NEW_CODE</comment>
+						</carrier_code_mappings>
 					</fields>
 				</order>
 
