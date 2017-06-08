@@ -60,7 +60,7 @@ class Inkl_RealDe_Model_Entity_Order extends Mage_Core_Model_Abstract
 
 	public function getBillingAddressCompany($default = '')
 	{
-		return $this->getContentPathValue('billing_address/company', $default);
+		return $this->getContentPathValue('billing_address/company_name', $default);
 	}
 
 	public function getBillingAddressFirstname($default = '')
@@ -115,7 +115,7 @@ class Inkl_RealDe_Model_Entity_Order extends Mage_Core_Model_Abstract
 
 	public function getShippingAddressCompany($default = '')
 	{
-		return $this->getContentPathValue('shipping_address/company', $default);
+		return $this->getContentPathValue('shipping_address/company_name', $default);
 	}
 
 	public function getShippingAddressFirstname($default = '')
