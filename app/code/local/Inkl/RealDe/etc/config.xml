@@ -136,7 +136,6 @@
 		</payment>
 	</default>
 
-	<!--
 	<crontab>
 		<jobs>
 			<inkl_realde_order>
@@ -149,6 +148,5 @@
 			</inkl_realde_order>
 		</jobs>
 	</crontab>
-	-->
 
 </config>
