@@ -1,16 +1,12 @@
 <?php
 
-use Hitmeister\Component\Api\ClientBuilder;
-
 class Inkl_RealDe_Model_Import_Api
 {
-	private $apiConfigHelper;
 	private $generalConfigHelper;
 
 	public function __construct()
 	{
 		$this->generalConfigHelper = Mage::helper('inkl_realde/config_general');
-		$this->apiConfigHelper = Mage::helper('inkl_realde/config_api');
 	}
 
 	public function import()
@@ -30,10 +26,7 @@ class Inkl_RealDe_Model_Import_Api
 	{
 		try
 		{
-			$client = ClientBuilder::create()
-				->setClientKey($this->apiConfigHelper->getClientKey($store->getId()))
-				->setClientSecret($this->apiConfigHelper->getClientSecret($store->getId()))
-				->build();
+			$client = Mage::helper('inkl_realde/api_client')->build($store->getId());
 
 			$orderUnits = $client->orderUnits()->find('need_to_be_sent');
 			foreach ($orderUnits as $orderUnit)
