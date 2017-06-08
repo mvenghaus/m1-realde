@@ -3,10 +3,12 @@
 class Inkl_RealDe_Model_Import_Api
 {
 	private $generalConfigHelper;
+	private $apiConfigHelper;
 
 	public function __construct()
 	{
 		$this->generalConfigHelper = Mage::helper('inkl_realde/config_general');
+		$this->apiConfigHelper = Mage::helper('inkl_realde/config_api');
 	}
 
 	public function import()
