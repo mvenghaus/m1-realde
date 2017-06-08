@@ -68,10 +68,14 @@ class Inkl_RealDe_Model_Process_Order
 	 */
 	private function setBaseData(Mage_Sales_Model_Quote $quote, Inkl_RealDe_Model_Entity_Order $realDeOrder)
 	{
+		$customerNote = sprintf('Bestellnummer: %s', $realDeOrder->getRealDeOrderId());
+		$customerNote .= sprintf('<br>Rechnung: <a href="%s" target="_blank">%s</a>', $realDeOrder->getInvoiceUrl(), $realDeOrder->getInvoiceNumber());
+
 		$quote
+			->setRealDeOrderId($realDeOrder->getRealDeOrderId())
 			->setStoreId($realDeOrder->getStoreId())
 			->setBaseCurrencyCode($realDeOrder->getCurrencyCode())
-			->setCustomerNote($realDeOrder->getRealDeOrderId())
+			->setCustomerNote($customerNote)
 			->setCustomerIsGuest(true)
 			->setCustomerEmail($realDeOrder->getEmail())
 			->setCustomerFirstname($realDeOrder->getBillingAddressFirstname())
@@ -85,15 +89,14 @@ class Inkl_RealDe_Model_Process_Order
 	private function setBillingAddress(Mage_Sales_Model_Quote $quote, Inkl_RealDe_Model_Entity_Order $realDeOrder)
 	{
 		$quote->getBillingAddress()
-			->setCompany($realDeOrder->getBillingAddressCompany())
-			->setFirstname($realDeOrder->getBillingAddressFirstname())
-			->setLastname($realDeOrder->getBillingAddressLastname())
-			->setStreet(Mage::helper('inkl_realde/street')->buildStreetData($realDeOrder->getBillingAddressStreet(), $realDeOrder->getBillingAddressHouseNumber(), $realDeOrder->getBillingAddressAdditional(), $realDeOrder->getStoreId()))
-			->setPostcode($realDeOrder->getBillingAddressPostcode())
-			->setCity($realDeOrder->getBillingAddressCity())
-			->setCountryId($realDeOrder->getBillingAddressCountryId())
-			->setRegionId($realDeOrder->getBillingAddressRegionId())
-			->setTelephone($realDeOrder->getBillingAddressPhone('-'));
+			->setCompany()
+			->setFirstname('Real')
+			->setLastname('de')
+			->setStreet(Mage::helper('inkl_realde/street')->buildStreetData('Metro-Straße', '1', '', $realDeOrder->getStoreId()))
+			->setPostcode('40235')
+			->setCity('Düsseldorf')
+			->setCountryId('DE')
+			->setTelephone('02161/403-0');
 	}
 
 	/**
@@ -110,7 +113,6 @@ class Inkl_RealDe_Model_Process_Order
 			->setPostcode($realDeOrder->getShippingAddressPostcode())
 			->setCity($realDeOrder->getShippingAddressCity())
 			->setCountryId($realDeOrder->getShippingAddressCountryId())
-			->setRegionId($realDeOrder->getShippingAddressRegionId())
 			->setTelephone($realDeOrder->getShippingAddressPhone('-'));
 	}
 
@@ -123,7 +125,6 @@ class Inkl_RealDe_Model_Process_Order
 		foreach ($realDeOrder->getOrderItems() as $orderItem)
 		{
 			$quoteItem = $quote->addProduct($orderItem['product'], $orderItem['qty']);
-
 			$quoteItem->setData('real_de_order_unit_id', $orderItem['order_unit_id']);
 		}
 

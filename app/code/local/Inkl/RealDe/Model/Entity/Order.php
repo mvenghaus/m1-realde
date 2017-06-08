@@ -190,7 +190,8 @@ class Inkl_RealDe_Model_Entity_Order extends Mage_Core_Model_Abstract
 			$product = Mage::getModel('catalog/product')->load($baseProduct->getId())
 				->setName($item['title'])
 				->setPrice($item['price'])
-				->setFinalPrice($item['price']);
+				->setFinalPrice($item['price'])
+				->setSpecialPrice($item['price']);
 
 			$orderItems[] = [
 				'order_unit_id' => $item['order_unit_id'],
@@ -200,6 +201,17 @@ class Inkl_RealDe_Model_Entity_Order extends Mage_Core_Model_Abstract
 		}
 
 		return $orderItems;
+	}
+
+
+	public function getInvoiceNumber($default = '')
+	{
+		return $this->getContentPathValue('invoice/number', $default);
+	}
+
+	public function getInvoiceUrl($default = '')
+	{
+		return $this->getContentPathValue('invoice/url', $default);
 	}
 
 }

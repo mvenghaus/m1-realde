@@ -41,6 +41,24 @@
 				</setup>
 			</inkl_realde_setup>
 		</resources>
+
+		<fieldsets>
+			<sales_convert_quote>
+				<real_de_order_id><to_order>*</to_order></real_de_order_id>
+			</sales_convert_quote>
+
+			<sales_convert_quote_item>
+				<real_de_order_unit_id><to_order_item>*</to_order_item></real_de_order_unit_id>
+			</sales_convert_quote_item>
+
+			<sales_convert_order>
+				<real_de_order_id><to_quote>*</to_quote></real_de_order_id>
+			</sales_convert_order>
+
+			<sales_convert_order_item>
+				<real_de_order_unit_id><to_quote_item>*</to_quote_item></real_de_order_unit_id>
+			</sales_convert_order_item>
+		</fieldsets>
 	</global>
 
 	<admin>
@@ -60,7 +78,7 @@
 			<sales>
 				<children>
 					<inkl_realde translate="title">
-						<title>Real.de</title>
+						<title>Real.de Orders</title>
 						<action>adminhtml/realDeOrder</action>
 						<sort_order>11</sort_order>
 					</inkl_realde>
