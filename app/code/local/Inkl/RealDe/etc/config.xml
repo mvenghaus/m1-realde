@@ -28,7 +28,7 @@
 				<class>Inkl_RealDe_Model_Resource</class>
 				<entities>
 					<orders>
-						<table>realde_orders</table>
+						<table>real_de_orders</table>
 					</orders>
 				</entities>
 			</inkl_realde_resource>
@@ -60,7 +60,7 @@
 			<sales>
 				<children>
 					<inkl_realde translate="title">
-						<title>Real.de Orders</title>
+						<title>Real.de</title>
 						<action>adminhtml/realDeOrder</action>
 						<sort_order>11</sort_order>
 					</inkl_realde>
@@ -118,6 +118,7 @@
 		</payment>
 	</default>
 
+	<!--
 	<crontab>
 		<jobs>
 			<inkl_realde_order>
@@ -130,5 +131,6 @@
 			</inkl_realde_order>
 		</jobs>
 	</crontab>
+	-->
 
 </config>

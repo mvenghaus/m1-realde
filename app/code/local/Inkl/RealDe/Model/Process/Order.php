@@ -9,15 +9,12 @@ class Inkl_RealDe_Model_Process_Order
 		{
 			try
 			{
-				$documentOrder = Mage::getModel('inkl_realde/document_order')->load($realDeOrder);
-
-				$magentoOrder = $this->createMagentoOrder($documentOrder);
+				$magentoOrder = $this->createMagentoOrder($realDeOrder);
 
 				$realDeOrder
 					->setProcessed(true)
 					->setMagentoOrderId($magentoOrder->getId())
 					->save();
-
 			} catch (Exception $e)
 			{
 				$realDeOrder
@@ -42,21 +39,17 @@ class Inkl_RealDe_Model_Process_Order
 		return $collection;
 	}
 
-	private function createMagentoOrder(Inkl_RealDe_Model_Document_Order $documentOrder)
+	private function createMagentoOrder(Inkl_RealDe_Model_Entity_Order $realDeOrder)
 	{
 		/** @var Mage_Sales_Model_Quote $quote */
 		$quote = Mage::getModel('sales/quote');
 
-		$this->setBaseData($quote, $documentOrder);
-
-		print_r($quote->debug());
-
-		/*
-		$this->setBillingAddress($quote, $documentOrder);
-		$this->setShippingAddress($quote, $documentOrder);
-		$this->setProducts($quote, $documentOrder);
-		$this->setShippingMethod($quote, $documentOrder);
-		$this->setPaymentMethod($quote, $documentOrder);
+		$this->setBaseData($quote, $realDeOrder);
+		$this->setBillingAddress($quote, $realDeOrder);
+		$this->setShippingAddress($quote, $realDeOrder);
+		$this->setProducts($quote, $realDeOrder);
+		$this->setShippingMethod($quote, $realDeOrder);
+		$this->setPaymentMethod($quote, $realDeOrder);
 
 		$quote->collectTotals()->save();
 
@@ -64,75 +57,74 @@ class Inkl_RealDe_Model_Process_Order
 		$service->submitAll();
 		$order = $service->getOrder();
 
-		$order->sendNewOrderEmail();
-		*/
+		// $order->sendNewOrderEmail();
 
 		return $order;
 	}
 
 	/**
 	 * @param Mage_Sales_Model_Quote $quote
-	 * @param Inkl_Check24_Model_OpenTrans_Order $openTransOrder
+	 * @param Inkl_RealDe_Model_Entity_Order $realDeOrder
 	 */
-	private function setBillingAddress(Mage_Sales_Model_Quote $quote, Inkl_Check24_Model_OpenTrans_Order $openTransOrder)
+	private function setBaseData(Mage_Sales_Model_Quote $quote, Inkl_RealDe_Model_Entity_Order $realDeOrder)
+	{
+		$quote
+			->setStoreId($realDeOrder->getStoreId())
+			->setBaseCurrencyCode($realDeOrder->getCurrencyCode())
+			->setCustomerNote($realDeOrder->getRealDeOrderId())
+			->setCustomerIsGuest(true)
+			->setCustomerEmail($realDeOrder->getEmail())
+			->setCustomerFirstname($realDeOrder->getBillingAddressFirstname())
+			->setCustomerLastname($realDeOrder->getBillingAddressLastname());
+	}
+
+	/**
+	 * @param Mage_Sales_Model_Quote $quote
+	 * @param Inkl_RealDe_Model_Entity_Order $realDeOrder
+	 */
+	private function setBillingAddress(Mage_Sales_Model_Quote $quote, Inkl_RealDe_Model_Entity_Order $realDeOrder)
 	{
 		$quote->getBillingAddress()
-			->setCompany($openTransOrder->getInvoiceCompany())
-			->setFirstname($openTransOrder->getInvoiceFirstname())
-			->setLastname($openTransOrder->getInvoiceLastname())
-			->setStreet($openTransOrder->getInvoiceStreet())
-			->setPostcode($openTransOrder->getInvoicePostcode())
-			->setCity($openTransOrder->getInvoiceCity())
-			->setCountryId($openTransOrder->getInvoiceCountryCode())
-			->setRegionId($openTransOrder->getInvoiceRegionId())
-			->setTelephone($openTransOrder->getInvoicePhone());
+			->setCompany($realDeOrder->getBillingAddressCompany())
+			->setFirstname($realDeOrder->getBillingAddressFirstname())
+			->setLastname($realDeOrder->getBillingAddressLastname())
+			->setStreet(Mage::helper('inkl_realde/street')->buildStreetData($realDeOrder->getBillingAddressStreet(), $realDeOrder->getBillingAddressHouseNumber(), $realDeOrder->getBillingAddressAdditional(), $realDeOrder->getStoreId()))
+			->setPostcode($realDeOrder->getBillingAddressPostcode())
+			->setCity($realDeOrder->getBillingAddressCity())
+			->setCountryId($realDeOrder->getBillingAddressCountryId())
+			->setRegionId($realDeOrder->getBillingAddressRegionId())
+			->setTelephone($realDeOrder->getBillingAddressPhone('-'));
 	}
 
 	/**
 	 * @param Mage_Sales_Model_Quote $quote
-	 * @param Inkl_Check24_Model_OpenTrans_Order $openTransOrder
+	 * @param Inkl_RealDe_Model_Entity_Order $realDeOrder
 	 */
-	private function setBaseData(Mage_Sales_Model_Quote $quote, Inkl_RealDe_Model_Document_Order $documentOrder)
-	{
-		Mage::log(sprintf('%s - setBaseData | store_id: %s', $documentOrder->getOrderId(), $openTransOrder->getStoreId()), null, 'check24--orders.log');
-
-		$quote
-			->setStoreId($openTransOrder->getStoreId())
-			->setBaseCurrencyCode($openTransOrder->getCurrencyCode())
-			->setCustomerNote($openTransOrder->getOrderId())
-			->setCustomerIsGuest(true)
-			->setCustomerEmail($openTransOrder->getInvoiceEmail())
-			->setCustomerFirstname($openTransOrder->getInvoiceFirstname())
-			->setCustomerLastname($openTransOrder->getInvoiceLastname());
-	}
-
-	/**
-	 * @param Mage_Sales_Model_Quote $quote
-	 * @param Inkl_Check24_Model_OpenTrans_Order $openTransOrder
-	 */
-	private function setShippingAddress(Mage_Sales_Model_Quote $quote, Inkl_Check24_Model_OpenTrans_Order $openTransOrder)
+	private function setShippingAddress(Mage_Sales_Model_Quote $quote, Inkl_RealDe_Model_Entity_Order $realDeOrder)
 	{
 		$quote->getShippingAddress()
-			->setCompany($openTransOrder->getDeliveryCompany())
-			->setFirstname($openTransOrder->getDeliveryFirstname())
-			->setLastname($openTransOrder->getDeliveryLastname())
-			->setStreet($openTransOrder->getDeliveryStreet())
-			->setPostcode($openTransOrder->getDeliveryPostcode())
-			->setCity($openTransOrder->getDeliveryCity())
-			->setCountryId($openTransOrder->getDeliveryCountryCode())
-			->setRegionId($openTransOrder->getDeliveryRegionId())
-			->setTelephone($openTransOrder->getDeliveryPhone());
+			->setCompany($realDeOrder->getShippingAddressCompany())
+			->setFirstname($realDeOrder->getShippingAddressFirstname())
+			->setLastname($realDeOrder->getShippingAddressLastname())
+			->setStreet(Mage::helper('inkl_realde/street')->buildStreetData($realDeOrder->getShippingAddressStreet(), $realDeOrder->getShippingAddressHouseNumber(), $realDeOrder->getShippingAddressAdditional(), $realDeOrder->getStoreId()))
+			->setPostcode($realDeOrder->getShippingAddressPostcode())
+			->setCity($realDeOrder->getShippingAddressCity())
+			->setCountryId($realDeOrder->getShippingAddressCountryId())
+			->setRegionId($realDeOrder->getShippingAddressRegionId())
+			->setTelephone($realDeOrder->getShippingAddressPhone('-'));
 	}
 
 	/**
 	 * @param Mage_Sales_Model_Quote $quote
-	 * @param Inkl_Check24_Model_OpenTrans_Order $openTransOrder
+	 * @param Inkl_RealDe_Model_Entity_Order $realDeOrder
 	 */
-	private function setProducts(Mage_Sales_Model_Quote $quote, Inkl_Check24_Model_OpenTrans_Order $openTransOrder)
+	private function setProducts(Mage_Sales_Model_Quote $quote, Inkl_RealDe_Model_Entity_Order $realDeOrder)
 	{
-		foreach ($openTransOrder->getOrderItems() as $orderItem)
+		foreach ($realDeOrder->getOrderItems() as $orderItem)
 		{
-			$quote->addProduct($orderItem['product'], $orderItem['qty']);
+			$quoteItem = $quote->addProduct($orderItem['product'], $orderItem['qty']);
+
+			$quoteItem->setData('real_de_order_unit_id', $orderItem['order_unit_id']);
 		}
 
 		$quote
@@ -142,16 +134,16 @@ class Inkl_RealDe_Model_Process_Order
 
 	/**
 	 * @param Mage_Sales_Model_Quote $quote
-	 * @param Inkl_Check24_Model_OpenTrans_Order $openTransOrder
+	 * @param Inkl_RealDe_Model_Entity_Order $realDeOrder
 	 */
-	private function setShippingMethod(Mage_Sales_Model_Quote $quote, Inkl_Check24_Model_OpenTrans_Order $openTransOrder)
+	private function setShippingMethod(Mage_Sales_Model_Quote $quote, Inkl_RealDe_Model_Entity_Order $realDeOrder)
 	{
 		$quote->getShippingAddress()
 			->setCollectShippingRates(true)
 			->collectShippingRates();
 
 		$shippingMethod = '';
-		$shippingCarrier = Mage::helper('inkl_check24/config_order')->getShippingCarrier($openTransOrder->getStoreId());
+		$shippingCarrier = Mage::helper('inkl_realde/config_order')->getShippingCarrier($realDeOrder->getStoreId());
 
 		foreach ($quote->getShippingAddress()->getShippingRatesCollection() as $rate)
 		{
@@ -168,11 +160,11 @@ class Inkl_RealDe_Model_Process_Order
 
 	/**
 	 * @param Mage_Sales_Model_Quote $quote
-	 * @param Inkl_Check24_Model_OpenTrans_Order $openTransOrder
+	 * @param Inkl_RealDe_Model_Entity_Order $realDeOrder
 	 */
-	private function setPaymentMethod(Mage_Sales_Model_Quote $quote, Inkl_Check24_Model_OpenTrans_Order $openTransOrder)
+	private function setPaymentMethod(Mage_Sales_Model_Quote $quote, Inkl_RealDe_Model_Entity_Order $realDeOrder)
 	{
-		$quote->getPayment()->importData(['method' => 'check24']);
+		$quote->getPayment()->importData(['method' => 'realde']);
 	}
 
 }

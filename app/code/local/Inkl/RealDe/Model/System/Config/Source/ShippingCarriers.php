@@ -1,6 +1,6 @@
 <?php
 
-class Inkl_RealDe_System_Config_Source_ShippingCarriers
+class Inkl_RealDe_Model_System_Config_Source_ShippingCarriers
 {
 
 	public function toOptionArray()
