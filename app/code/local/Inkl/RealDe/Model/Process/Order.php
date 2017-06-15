@@ -91,7 +91,7 @@ class Inkl_RealDe_Model_Process_Order
 		$quote->getBillingAddress()
 			->setCompany()
 			->setFirstname('Real')
-			->setLastname('de')
+			->setLastname('Sb-Warenhaus GmbH')
 			->setStreet(Mage::helper('inkl_realde/street')->buildStreetData('Metro-Straße', '1', '', $realDeOrder->getStoreId()))
 			->setPostcode('40235')
 			->setCity('Düsseldorf')
