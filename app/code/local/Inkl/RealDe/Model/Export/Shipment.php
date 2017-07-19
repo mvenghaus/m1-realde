@@ -26,7 +26,10 @@ class Inkl_RealDe_Model_Export_Shipment
 			{
 				if (!$order->getData('real_de_order_unit_shipped'))
 				{
-					$client->orderUnits()->send($orderItem->getData('real_de_order_unit_id'), $carrierCode, $trackingNumber);
+					foreach (explode(',', $orderItem->getData('real_de_order_unit_ids')) as $realDeOrderUnitId)
+					{
+						$client->orderUnits()->send($realDeOrderUnitId, $carrierCode, $trackingNumber);
+					}
 
 					$orderItem
 						->setData('real_de_order_unit_shipped', 1)

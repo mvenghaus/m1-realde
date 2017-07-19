@@ -125,7 +125,7 @@ class Inkl_RealDe_Model_Process_Order
 		foreach ($realDeOrder->getOrderItems() as $orderItem)
 		{
 			$quoteItem = $quote->addProduct($orderItem['product'], $orderItem['qty']);
-			$quoteItem->setData('real_de_order_unit_id', $orderItem['order_unit_id']);
+			$quoteItem->setData('real_de_order_unit_ids', implode(',', $orderItem['order_unit_ids']));
 		}
 
 		$quote

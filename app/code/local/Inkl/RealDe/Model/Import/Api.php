@@ -79,7 +79,7 @@ class Inkl_RealDe_Model_Import_Api
 		{
 			$oldData['items'][$orderUnitItemId] = [
 				'order_unit_item_id' => $orderUnitItemId,
-				'order_unit_id' => $orderUnitId,
+				'order_unit_ids' => [],
 				'title' => $orderUnitItem['title'],
 				'ean' => current($orderUnitItem['eans']),
 				'price' => $orderUnitPrice,
@@ -88,6 +88,8 @@ class Inkl_RealDe_Model_Import_Api
 		}
 
 		$oldData['items'][$orderUnitItemId]['qty'] += 1;
+		$oldData['items'][$orderUnitItemId]['order_unit_ids'][] = $orderUnitId;
+
 		$oldData['order_unit_ids'][$orderUnitId] = $orderUnitId;
 
 		return $oldData;

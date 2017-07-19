@@ -32,9 +32,9 @@ $connection->createTable($table);
 
 $setup = new Mage_Sales_Model_Resource_Setup('core_setup');
 $setup->addAttribute('quote', 'real_de_order_id', ['type' => 'varchar']);
-$setup->addAttribute('quote_item', 'real_de_order_unit_id', ['type' => 'varchar']);
+$setup->addAttribute('quote_item', 'real_de_order_unit_ids', ['type' => 'text']);
 $setup->addAttribute('order', 'real_de_order_id', ['type' => 'varchar']);
-$setup->addAttribute('order_item', 'real_de_order_unit_id', ['type' => 'varchar']);
+$setup->addAttribute('order_item', 'real_de_order_unit_ids', ['type' => 'text']);
 $setup->addAttribute('order_item', 'real_de_order_unit_shipped', ['type' => 'int']);
 
 $installer->endSetup();

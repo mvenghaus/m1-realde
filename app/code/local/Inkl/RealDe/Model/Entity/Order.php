@@ -194,7 +194,7 @@ class Inkl_RealDe_Model_Entity_Order extends Mage_Core_Model_Abstract
 				->setSpecialPrice($item['price']);
 
 			$orderItems[] = [
-				'order_unit_id' => $item['order_unit_id'],
+				'order_unit_ids' => $item['order_unit_ids'],
 				'product' => $product,
 				'qty' => $item['qty']
 			];

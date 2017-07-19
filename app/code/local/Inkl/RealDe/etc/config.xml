@@ -48,7 +48,7 @@
 			</sales_convert_quote>
 
 			<sales_convert_quote_item>
-				<real_de_order_unit_id><to_order_item>*</to_order_item></real_de_order_unit_id>
+				<real_de_order_unit_ids><to_order_item>*</to_order_item></real_de_order_unit_ids>
 			</sales_convert_quote_item>
 
 			<sales_convert_order>
@@ -56,7 +56,7 @@
 			</sales_convert_order>
 
 			<sales_convert_order_item>
-				<real_de_order_unit_id><to_quote_item>*</to_quote_item></real_de_order_unit_id>
+				<real_de_order_unit_ids><to_quote_item>*</to_quote_item></real_de_order_unit_ids>
 			</sales_convert_order_item>
 		</fieldsets>
 

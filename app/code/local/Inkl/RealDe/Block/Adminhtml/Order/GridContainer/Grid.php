@@ -48,7 +48,8 @@ class Inkl_RealDe_Block_Adminhtml_Order_GridContainer_Grid extends Mage_Adminhtm
 			'header' => Mage::helper('inkl_realde')->__('Magento Order'),
 			'width' => '150px',
 			'index' => 'magento_order_id',
-			'renderer' => 'inkl_realde/adminhtml_order_column_renderer_magentoOrder'
+			'renderer' => 'inkl_realde/adminhtml_order_column_renderer_magentoOrder',
+			'filter_condition_callback' => [$this, 'filterMagentoOrderId']
 		]);
 
 		$this->addColumn('error', [
@@ -78,6 +79,19 @@ class Inkl_RealDe_Block_Adminhtml_Order_GridContainer_Grid extends Mage_Adminhtm
 	public function getRowUrl($row)
 	{
 		return '#';
+	}
+
+	public function filterMagentoOrderId(Inkl_RealDe_Model_Resource_Order_Collection $collection, $column)
+	{
+		$value = $column->getFilter()->getValue();
+		if (!$value)
+		{
+			return $this;
+		}
+
+		$collection
+			->join(['order' => 'sales/order'], 'magento_order_id=order.entity_id', ['increment_id'])
+			->addFieldToFilter('increment_id', ['like' => '%' . $value . '%']);
 	}
 
 }
