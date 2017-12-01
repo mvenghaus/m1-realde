@@ -191,8 +191,17 @@ class Inkl_RealDe_Model_Entity_Order extends Mage_Core_Model_Abstract
 				$itemEan = substr($itemEan, 0, 13);
 			}
 
-			$baseProduct = Mage::getModel('catalog/product')->loadByAttribute($eanAttribute->getAttributeCode(), $itemEan);
-			if (!($baseProduct->getId() > 0))
+			$productCollection = Mage::getResourceModel('catalog/product_collection')
+				->addAttributeToFilter('type_id', ['eq' => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE])
+				->addAttributeToFilter($eanAttribute->getAttributeCode(), ['eq' => $itemEan]);
+
+			$baseProduct = null;
+			foreach ($productCollection as $product)
+			{
+				$baseProduct = $product;
+			}
+
+			if (!$baseProduct)
 			{
 				throw new Exception(sprintf('product with ean "%s" not found'), $itemEan);
 			}
