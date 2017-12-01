@@ -185,7 +185,17 @@ class Inkl_RealDe_Model_Entity_Order extends Mage_Core_Model_Abstract
 		$orderItems = [];
 		foreach ($contentData['items'] as $item)
 		{
-			$baseProduct = Mage::getModel('catalog/product')->loadByAttribute($eanAttribute->getAttributeCode(), $item['ean']);
+			$itemEan = $item['ean'];
+			if (strlen($itemEan) === 14)
+			{
+				$itemEan = substr($itemEan, 0, 13);
+			}
+
+			$baseProduct = Mage::getModel('catalog/product')->loadByAttribute($eanAttribute->getAttributeCode(), $itemEan);
+			if (!($baseProduct->getId() > 0))
+			{
+				throw new Exception(sprintf('product with ean "%s" not found'), $itemEan);
+			}
 
 			$product = Mage::getModel('catalog/product')->load($baseProduct->getId())
 				->setName($item['title'])
@@ -202,7 +212,6 @@ class Inkl_RealDe_Model_Entity_Order extends Mage_Core_Model_Abstract
 
 		return $orderItems;
 	}
-
 
 	public function getInvoiceNumber($default = '')
 	{
