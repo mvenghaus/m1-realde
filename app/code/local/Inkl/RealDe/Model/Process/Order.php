@@ -89,14 +89,14 @@ class Inkl_RealDe_Model_Process_Order
 	private function setBillingAddress(Mage_Sales_Model_Quote $quote, Inkl_RealDe_Model_Entity_Order $realDeOrder)
 	{
 		$quote->getBillingAddress()
-			->setCompany()
-			->setFirstname('Real')
-			->setLastname('Sb-Warenhaus GmbH')
-			->setStreet(Mage::helper('inkl_realde/street')->buildStreetData('Metro-Straße', '1', '', $realDeOrder->getStoreId()))
-			->setPostcode('40235')
-			->setCity('Düsseldorf')
-			->setCountryId('DE')
-			->setTelephone('02161/403-0');
+			->setCompany($realDeOrder->getBillingAddressCompany())
+			->setFirstname($realDeOrder->getBillingAddressFirstname())
+			->setLastname($realDeOrder->getBillingAddressLastname())
+            ->setStreet(Mage::helper('inkl_realde/street')->buildStreetData($realDeOrder->getBillingAddressStreet(), $realDeOrder->getBillingAddressHouseNumber(), $realDeOrder->getBillingAddressAdditional(), $realDeOrder->getStoreId()))
+            ->setPostcode($realDeOrder->getBillingAddressPostcode())
+            ->setCity($realDeOrder->getBillingAddressCity())
+            ->setCountryId($realDeOrder->getBillingAddressCountryId())
+            ->setTelephone($realDeOrder->getBillingAddressPhone('-'));
 	}
 
 	/**
